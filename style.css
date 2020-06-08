@@ -31,7 +31,51 @@ body{
     margin-top: 5px;
     visibility: hidden;
 }
+
 .playernames{
     font-weight: 700;
-    transform: translate(-40%,-0%);
+    width: 80vw;
+    margin:auto
+}
+
+.playernames td, .playernames th{
+    border: 1px solid grey;
+    padding:5px;
+    background-color: honeydew;
+}
+
+.dart_add{
+    font-style: italic;
+    font-size: 30px;
+    font-weight: 800;
+}
+
+.panel_remove{
+    animation: hide_panel 1s ease;
+    visibility: hidden;
+}
+
+.score_updates{
+    margin-top: 50px;
+    justify-content: center;
+}
+
+.score_updates button{
+    padding:5px;
+}
+
+.score_updates div{
+    margin:4px;
+    font-weight: 700;
+    font-style: italic;
+}
+
+@keyframes hide_panel{
+    0%{
+        visibility: visible;
+        opacity:1;
+    }
+    100%{
+        opacity: 0;
+    }
 }
