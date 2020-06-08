@@ -1,3 +1,5 @@
+// The variables needed to add event listeners and will be referenced through
+// more than one function
 const number_of_players = document.getElementById("number_of_players");
 const player_name = document.querySelector(".player_name");
 const body = document.querySelector(".body");
@@ -8,8 +10,13 @@ const setup = document.querySelector(".setup")
 const how_many = document.querySelector(".how_many")
 const set_players = document.querySelector(".set_players")
 const score_updates = document.querySelector(".score_updates");
+
+// A variable which is assigned in enter_number_button but used when entering 
+// players.
 let total
 
+
+// A function which sets how many players are to be added
 enter_number_button.addEventListener("click", ()=>{
     total =  number_of_players.value;
     how_many.textContent = "Enter the player names";
@@ -18,28 +25,45 @@ enter_number_button.addEventListener("click", ()=>{
     enter_number_button.disabled = true;
 }) 
 
+/* 
+This function creates DOM elements which are can be referenced for later use.
+Many of these variables are created with ID's so they can be referenced 
+when implementing new scores etc. All of the elements created here are put into
+the playernames table.
+*/
 function create_new_player(player){
-    var newRow = document.createElement('tr');
-    var playerCol = document.createElement('th');
+    
+
+    // Create the table elements
+    let newRow = document.createElement('tr');
+    let playerCol = document.createElement('th');
+    let score = document.createElement("th");
+    let average = document.createElement("th");
+    let thrown = document.createElement("th");
+
+    // Set text of table elements
     playerCol.textContent = player;
     playerCol.id = "player_name"+i;
-    var score = document.createElement("th");
     score.textContent = "Score required";
-    var average = document.createElement("th");
     average.textContent = "3 Dart average";
-    var thrown = document.createElement("th");
     thrown.textContent = "Darts Thrown";
-    var numbers = document.createElement("tr");
-    var blankCol = document.createElement("td");
-    var score_value = document.createElement("td");
-    score_value.textContent = "501";
+
+    // Create the number values
+    let numbers = document.createElement("tr");
+    let blankCol = document.createElement("td");
+    let score_value = document.createElement("td");
+    let average_score = document.createElement("td");
+    let thrown_value = document.createElement("th");
+
+    // Set number elements values
+    score_value.textContent = 501;
     score_value.id = "score_value"+i;
-    var average_score = document.createElement("td");
-    average_score.textContent = "0";
+    average_score.textContent = 0;
     average_score.id = "average_score"+i;
-    var thrown_value = document.createElement("th");
-    thrown_value.textContent = "0";
+    thrown_value.textContent = 0;
     thrown_value.id = "thrown_value"+i;
+
+    // Place all of the variables into the player_names table rows
     newRow.appendChild(playerCol);
     newRow.appendChild(score);
     newRow.appendChild(average);
@@ -48,39 +72,53 @@ function create_new_player(player){
     numbers.appendChild(score_value);
     numbers.appendChild(average_score);
     numbers.appendChild(thrown_value);
+
+    // Place the rows onto the table
     document.querySelector(".playernames").appendChild(newRow);
     document.querySelector(".playernames").appendChild(numbers);
 }
 
-var button_id;
-var score_id;
+// This is the area that marks scores
 function scoreboard(){
-    var newdiv = document.createElement("div");
-    var nameOfPlayer = document.createElement("p");
+
+    // Creates elements for each name input
+    let newdiv = document.createElement("div");
+    let nameOfPlayer = document.createElement("p");
+    let add_score = document.createElement("button");
+    let score_input = document.createElement("input");
+
+    // Get the players name and set to each score element
     playerID = document.getElementById("player_name"+i);
     nameOfPlayer = playerID.textContent;
-    var score_input = document.createElement("input");
-    score_input.type = "text";
-    score_input.id = "dart_score"+i
-    let score_id = "score"+i;
-    score_input.id = score_id;
-    var add_score = document.createElement("button");
+
+    // Create IDs for each player input
+    score_input.id = "score"+i;
     add_score.id = i;
     add_score.classList.add("btn-primary")
     add_score.textContent = "Add your score!";
+
+    // Add all elements to a new div
     newdiv.append(nameOfPlayer);
     newdiv.append(score_input);
     newdiv.appendChild(add_score);
+
+    // Add to DOM
     score_updates.appendChild(newdiv);
 }
 
+
+// Create an index variable to end the loop
 i = 0
+
+// A function which adds players to the DOM
 enter_player_button.addEventListener("click", ()=>{
     i++
     if (i <= total){
         create_new_player(player_name.value)
         scoreboard()
         console.log(score_updates)
+
+        // If statement to remove the input panel
         if (i == total){
             setup.classList.add("panel_remove")
             names.style.visibility = "hidden"
@@ -89,16 +127,25 @@ enter_player_button.addEventListener("click", ()=>{
     }
 })
 
-let current_score = 501
-
-// Get the element, add a click listener...
+// Get the element, add a click listener to find the specific ID of each button
+// press.
 document.getElementById("button_list").addEventListener("click", function(e) {
 	if(e.target && e.target.nodeName == "BUTTON") {
+
+        // These variables are used to get the button ID
         let i = document.getElementById(e.target.id);
         let index = i.id;
+
+        // Variables that need to be changed
         let score_id = document.getElementById("score"+index);
         let score_value = document.getElementById("score_value"+index);
-        score_value.textContent = score_value.textContent -= parseInt(score_id.value);
-        score_id.value = "0";
+        let thrown_value = document.getElementById("thrown_value"+index);
+        let three_dart_average = document.getElementById("average_score"+index);
+
+        // Update the score of the darts thrown
+        score_value.textContent -= parseInt(score_id.value);
+        thrown_value.textContent = thrown_value.textContent + 3
+        three_dart_average.textContent = 501 - score_value.textContent;
+        score_id.value = 0;
 	}
 });
