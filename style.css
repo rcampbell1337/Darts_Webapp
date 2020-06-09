@@ -1,21 +1,23 @@
+/* Standard body layout */
 *{
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
-body{
-    font-family: sans-serif;
-}
 
-.body{
+/* styling of the body */
+.contain{
     margin: 0;
     background-color: rgba(50,205,50,0.4);
     height:100vh;
     position: absolute;
+    font-family: sans-serif;
 }
+
+/* The panel which sets up the game states */
 .setup{
-    position: relative;
-    top: 50%;
+    position: fixed;
+    top: 80%;
     left:50%;
     transform: translate(-50%, -50%);
     background: whitesmoke;
@@ -24,37 +26,45 @@ body{
     border: 1px solid gray;
 }
 
+/* Set the psuedo nav width */
 .alert{
     width: 100vw;
 }
+
+/* styling for the player entry fields */
 .names{
     margin-top: 5px;
     visibility: hidden;
 }
 
+/* Table styling */
 .playernames{
     font-weight: 700;
     width: 80vw;
     margin:auto
 }
 
+/* Table rows styling */
 .playernames td, .playernames th{
     border: 1px solid grey;
     padding:5px;
     background-color: honeydew;
 }
 
+/* Player name styling for input */
 .dart_add{
     font-style: italic;
     font-size: 30px;
     font-weight: 800;
 }
 
+/* An animation to remove the panel on call */
 .panel_remove{
     animation: hide_panel 1s ease;
     visibility: hidden;
 }
 
+/* Button elemenents styling */
 .score_updates{
     margin-top: 50px;
     justify-content: center;
@@ -70,6 +80,23 @@ body{
     font-style: italic;
 }
 
+/* Style for the restart button */
+#restart{
+    visibility: hidden;
+}
+
+
+/* Style for the winner alert */ 
+.winner{
+    font-weight: 700;
+    font-size: 50px;
+    width:50vw;
+    margin: auto;
+    background-color: honeydew;
+    border-radius: 20px;
+}
+
+/* Remove panel animation */
 @keyframes hide_panel{
     0%{
         visibility: visible;

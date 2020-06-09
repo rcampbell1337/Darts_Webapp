@@ -10,6 +10,7 @@ const setup = document.querySelector(".setup")
 const how_many = document.querySelector(".how_many")
 const set_players = document.querySelector(".set_players")
 const score_updates = document.querySelector(".score_updates");
+const restart =  document.getElementById("restart")
 
 // A variable which is assigned in enter_number_button but used when entering 
 // players.
@@ -55,7 +56,7 @@ function create_new_player(player){
     let average_score = document.createElement("td");
     let thrown_value = document.createElement("th");
 
-    // Set number elements values
+    // Set number elements values and give them ID's
     score_value.textContent = 501;
     score_value.id = "score_value"+i;
     average_score.textContent = 0;
@@ -108,7 +109,7 @@ function scoreboard(){
 
 
 // Create an index variable to end the loop
-i = 0
+let i = 0
 
 // A function which adds players to the DOM
 enter_player_button.addEventListener("click", ()=>{
@@ -127,9 +128,12 @@ enter_player_button.addEventListener("click", ()=>{
     }
 })
 
+let player_names = document.querySelector(".playernames");
+let button_list = document.getElementById("button_list");
+
 // Get the element, add a click listener to find the specific ID of each button
-// press.
-document.getElementById("button_list").addEventListener("click", function(e) {
+// press. This is the full game code.
+button_list.addEventListener("click", function(e) {
 	if(e.target && e.target.nodeName == "BUTTON") {
 
         // These variables are used to get the button ID
@@ -140,12 +144,38 @@ document.getElementById("button_list").addEventListener("click", function(e) {
         let score_id = document.getElementById("score"+index);
         let score_value = document.getElementById("score_value"+index);
         let thrown_value = document.getElementById("thrown_value"+index);
+        let thrown_int = +document.getElementById("thrown_value"+index).innerHTML;
         let three_dart_average = document.getElementById("average_score"+index);
 
         // Update the score of the darts thrown
         score_value.textContent -= parseInt(score_id.value);
-        thrown_value.textContent = thrown_value.textContent + 3
-        three_dart_average.textContent = 501 - score_value.textContent;
+        thrown_value.textContent = thrown_int += 3;
+        three_dart_average.textContent = Math.floor((501 - +score_value.textContent) / (thrown_int / 3));
         score_id.value = 0;
+        
+        // Variable for the winner id.
+        let winner = document.querySelector(".winner")
+
+        // Win conditions
+        if (score_value.textContent == 0)
+        {
+            player_names.style.visibility = "hidden";
+            button_list.style.visibility = "hidden";
+            winner.textContent = player_name.value + ", You won!";
+            restart.style.visibility = "visible";
+        }
 	}
 });
+
+restart.addEventListener("click", () =>{
+    player_names.style.visibility = "visible";
+    button_list.style.visibility = "visible";
+    restart.style.visibility = "hidden";
+    for (let index = 0; index < i; index++)
+    {
+        let reset_score = document.getElementById("score_value"+(index)).textContent;
+        let reset_
+        console.log(reset_score)
+        console.log(i)
+    }
+})
