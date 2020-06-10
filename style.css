@@ -8,7 +8,8 @@
 /* styling of the body */
 .contain{
     margin: 0;
-    background-color: rgba(50,205,50,0.4);
+    background-image: url("https://images6.alphacoders.com/430/thumb-1920-430362.jpg");
+    object-fit: contain;
     height:100vh;
     position: absolute;
     font-family: sans-serif;
@@ -17,7 +18,7 @@
 /* The panel which sets up the game states */
 .setup{
     position: fixed;
-    top: 80%;
+    top: 70%;
     left:50%;
     transform: translate(-50%, -50%);
     background: whitesmoke;
@@ -29,19 +30,20 @@
 /* Set the psuedo nav width */
 .alert{
     width: 100vw;
+    background: rgba(0, 100, 40, 0.7);
 }
 
 /* styling for the player entry fields */
 .names{
     margin-top: 5px;
-    visibility: hidden;
+    display: none;
 }
 
 /* Table styling */
 .playernames{
     font-weight: 700;
     width: 80vw;
-    margin:auto
+    margin:auto;
 }
 
 /* Table rows styling */
@@ -51,37 +53,32 @@
     background-color: honeydew;
 }
 
-/* Player name styling for input */
-.dart_add{
-    font-style: italic;
-    font-size: 30px;
-    font-weight: 800;
-}
-
 /* An animation to remove the panel on call */
 .panel_remove{
     animation: hide_panel 1s ease;
     visibility: hidden;
 }
 
-/* Button elemenents styling */
+/* Score inputs styling */
 .score_updates{
-    margin-top: 50px;
-    justify-content: center;
+    width: 80vw;
+    margin: auto;
+    background-color: rgba(255, 255, 255, 0.7);
 }
 
 .score_updates button{
     padding:5px;
+    font-weight: 700;
 }
 
 .score_updates div{
     margin:4px;
     font-weight: 700;
-    font-style: italic;
 }
 
+
 /* Style for the restart button */
-#restart{
+.restart{
     visibility: hidden;
 }
 
@@ -92,8 +89,10 @@
     font-size: 50px;
     width:50vw;
     margin: auto;
-    background-color: honeydew;
+    background-color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 10px;
     border-radius: 20px;
+    display: none;
 }
 
 /* Remove panel animation */

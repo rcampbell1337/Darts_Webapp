@@ -10,7 +10,7 @@ const setup = document.querySelector(".setup")
 const how_many = document.querySelector(".how_many")
 const set_players = document.querySelector(".set_players")
 const score_updates = document.querySelector(".score_updates");
-const restart =  document.getElementById("restart")
+const restart =  document.querySelector(".restart")
 
 // A variable which is assigned in enter_number_button but used when entering 
 // players.
@@ -27,7 +27,7 @@ enter_number_button.addEventListener("click", ()=>{
     total =  number_of_players.value;
     how_many.textContent = "Enter the player names";
     set_players.remove();
-    names.style.visibility = "visible";
+    names.style.display = "block";
     enter_number_button.disabled = true;
 }) 
 
@@ -46,6 +46,7 @@ function create_new_player(player){
     let score = document.createElement("th");
     let average = document.createElement("th");
     let thrown = document.createElement("th");
+    let wins = document.createElement("th");
 
     // Set text of table elements
     playerCol.textContent = player;
@@ -53,13 +54,15 @@ function create_new_player(player){
     score.textContent = "Score required";
     average.textContent = "3 Dart average";
     thrown.textContent = "Darts Thrown";
+    wins.textContent = "# of wins";
 
     // Create the number values
     let numbers = document.createElement("tr");
     let blankCol = document.createElement("td");
     let score_value = document.createElement("td");
     let average_score = document.createElement("td");
-    let thrown_value = document.createElement("th");
+    let thrown_value = document.createElement("td");
+    let win_number = document.createElement("td");
 
     // Set number elements values and give them ID's
     score_value.textContent = 501;
@@ -68,16 +71,21 @@ function create_new_player(player){
     average_score.id = "average_score"+i;
     thrown_value.textContent = 0;
     thrown_value.id = "thrown_value"+i;
+    win_number.textContent = 0;
+    win_number.id = "win"+i;
+
 
     // Place all of the variables into the player_names table rows
     newRow.appendChild(playerCol);
     newRow.appendChild(score);
     newRow.appendChild(average);
     newRow.appendChild(thrown);
+    newRow.appendChild(wins);
     numbers.appendChild(blankCol);
     numbers.appendChild(score_value);
     numbers.appendChild(average_score);
     numbers.appendChild(thrown_value);
+    numbers.appendChild(win_number);
 
     // Place the rows onto the table
     document.querySelector(".playernames").appendChild(newRow);
@@ -100,7 +108,7 @@ function scoreboard(){
     // Create IDs for each player input
     score_input.id = "score"+i;
     add_score.id = i;
-    add_score.classList.add("btn-primary")
+    add_score.classList.add("btn", "btn-primary")
     add_score.textContent = "Add your score!";
 
     // Add all elements to a new div
@@ -122,7 +130,7 @@ enter_player_button.addEventListener("click", ()=>{
     if (i <= total){
         create_new_player(player_name.value)
         scoreboard()
-        console.log(score_updates)
+        score_updates.style.padding = "20px";
 
         // If statement to remove the input panel
         if (i == total){
@@ -171,10 +179,17 @@ button_list.addEventListener("click", function(e) {
         // Win conditions
         if (score_value.textContent == 0)
         {
+            // Add to the win number
+            let win = document.getElementById("win"+index);
+            let win_int = +document.getElementById("win"+index).innerHTML;
+            win.textContent = win_int += 1;
+
+            // Set visibility on elements
             winner.style.visibility = "visible";
             player_names.style.visibility = "hidden";
             button_list.style.visibility = "hidden";
             winner.textContent = player_name.value + ", You won!";
+            winner.style.display = "block";
             restart.style.visibility = "visible";
         }
 	}
@@ -187,7 +202,7 @@ restart.addEventListener("click", () =>{
     player_names.style.visibility = "visible";
     button_list.style.visibility = "visible";
     restart.style.visibility = "hidden";
-    winner.style.visibility = "hidden";
+    winner.style.display = "none";
 
     // Create a loop for all players
     for (let index = 0; index < i; index++)
