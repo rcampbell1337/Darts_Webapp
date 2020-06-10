@@ -131,6 +131,9 @@ enter_player_button.addEventListener("click", ()=>{
 let player_names = document.querySelector(".playernames");
 let button_list = document.getElementById("button_list");
 
+// Variable for the winner id.
+let winner = document.querySelector(".winner")
+
 // Get the element, add a click listener to find the specific ID of each button
 // press. This is the full game code.
 button_list.addEventListener("click", function(e) {
@@ -152,13 +155,11 @@ button_list.addEventListener("click", function(e) {
         thrown_value.textContent = thrown_int += 3;
         three_dart_average.textContent = Math.floor((501 - +score_value.textContent) / (thrown_int / 3));
         score_id.value = 0;
-        
-        // Variable for the winner id.
-        let winner = document.querySelector(".winner")
 
         // Win conditions
         if (score_value.textContent == 0)
         {
+            winner.style.visibility = "visible";
             player_names.style.visibility = "hidden";
             button_list.style.visibility = "hidden";
             winner.textContent = player_name.value + ", You won!";
@@ -167,15 +168,18 @@ button_list.addEventListener("click", function(e) {
 	}
 });
 
+// Restart the game on click
 restart.addEventListener("click", () =>{
+
+    // Add and remove elements from the game board
     player_names.style.visibility = "visible";
     button_list.style.visibility = "visible";
     restart.style.visibility = "hidden";
+    winner.style.visibility = "hidden";
     for (let index = 0; index < i; index++)
     {
-        let reset_score = document.getElementById("score_value"+(index)).textContent;
-        let reset_
-        console.log(reset_score)
-        console.log(i)
+        // Reset the game score but keep the averages
+        let reset_score = document.getElementById("score_value"+(index+1));
+        reset_score.textContent = "501";
     }
 })
