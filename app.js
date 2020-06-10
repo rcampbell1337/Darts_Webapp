@@ -16,6 +16,11 @@ const restart =  document.getElementById("restart")
 // players.
 let total
 
+// A function that plays different sounds throughout the game
+function play_sound(sound){
+    let play_sound = new Audio(sound).play();
+    return play_sound;
+}
 
 // A function which sets how many players are to be added
 enter_number_button.addEventListener("click", ()=>{
@@ -154,6 +159,13 @@ button_list.addEventListener("click", function(e) {
         score_value.textContent -= parseInt(score_id.value);
         thrown_value.textContent = thrown_int += 3;
         three_dart_average.textContent = Math.floor((501 - +score_value.textContent) / (thrown_int / 3));
+        
+        // Soundbites for good scores
+        switch (parseInt(score_id.value)){
+            case 180:
+                play_sound("180.mp3");
+        }
+        
         score_id.value = 0;
 
         // Win conditions
@@ -176,6 +188,8 @@ restart.addEventListener("click", () =>{
     button_list.style.visibility = "visible";
     restart.style.visibility = "hidden";
     winner.style.visibility = "hidden";
+
+    // Create a loop for all players
     for (let index = 0; index < i; index++)
     {
         // Reset the game score but keep the averages
