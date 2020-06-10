@@ -11,6 +11,7 @@ const how_many = document.querySelector(".how_many")
 const set_players = document.querySelector(".set_players")
 const score_updates = document.querySelector(".score_updates");
 const restart =  document.querySelector(".restart")
+const errors = document.querySelector(".errors")
 
 // A variable which is assigned in enter_number_button but used when entering 
 // players.
@@ -24,11 +25,20 @@ function play_sound(sound){
 
 // A function which sets how many players are to be added
 enter_number_button.addEventListener("click", ()=>{
-    total =  number_of_players.value;
-    how_many.textContent = "Enter the player names";
-    set_players.remove();
-    names.style.display = "block";
-    enter_number_button.disabled = true;
+
+    // Make sure the user inputs a valid total
+    try{
+        if(isNaN(number_of_players.value)) throw "Please enter a number";
+        else if(number_of_players.value == "") throw "Please enter a value";
+        total =  number_of_players.value;
+        how_many.textContent = "Enter the player names";
+        set_players.remove();
+        names.style.display = "block";
+        enter_number_button.disabled = true;
+        errors.textContent = "";
+    }catch(err){
+        errors.textContent = err;
+    }
 }) 
 
 /* 
@@ -110,6 +120,7 @@ function scoreboard(){
     add_score.id = i;
     add_score.classList.add("btn", "btn-primary")
     add_score.textContent = "Add your score!";
+    score_input.value = "0"
 
     // Add all elements to a new div
     newdiv.append(nameOfPlayer);
@@ -128,15 +139,15 @@ let i = 0
 enter_player_button.addEventListener("click", ()=>{
     i++
     if (i <= total){
-        create_new_player(player_name.value)
-        scoreboard()
+        create_new_player(player_name.value);
+        scoreboard();
         score_updates.style.padding = "20px";
 
         // If statement to remove the input panel
         if (i == total){
-            setup.classList.add("panel_remove")
-            names.style.visibility = "hidden"
-            score_updates.classList.add(".dart_add")
+            setup.classList.add("panel_remove");
+            names.style.visibility = "hidden";
+            score_updates.classList.add(".dart_add");
         }
     }
 })
@@ -151,11 +162,12 @@ let winner = document.querySelector(".winner")
 // press. This is the full game code.
 button_list.addEventListener("click", function(e) {
 	if(e.target && e.target.nodeName == "BUTTON") {
+        errors.textContent = "";
 
         // These variables are used to get the button ID
         let i = document.getElementById(e.target.id);
         let index = i.id;
-
+        
         // Variables that need to be changed
         let score_id = document.getElementById("score"+index);
         let score_value = document.getElementById("score_value"+index);
@@ -163,16 +175,36 @@ button_list.addEventListener("click", function(e) {
         let thrown_int = +document.getElementById("thrown_value"+index).innerHTML;
         let three_dart_average = document.getElementById("average_score"+index);
 
-        // Update the score of the darts thrown
+        // Variable to add darts to average
+        let three_darts = 3
+
+        // Don't allow higher values that 180
+        if (parseInt(score_id.value) > 180){
+            score_id.value = "0";
+            three_darts = 0;
+        }
+        // Update the score of the darts thrown and make sure the input is a number
+        try{
+        if (isNaN(score_id.value)) throw "Please enter number values only";
+        else if(score_id.value == "") throw "Please enter a value";
         score_value.textContent -= parseInt(score_id.value);
-        thrown_value.textContent = thrown_int += 3;
-        three_dart_average.textContent = Math.floor((501 - +score_value.textContent) / (thrown_int / 3));
-        
+        thrown_value.textContent = thrown_int += three_darts;
+        if (three_darts == 3){
+            three_dart_average.textContent = Math.floor((501 - +score_value.textContent) / (thrown_int / three_darts));
+        }else{
+            throw "Please enter a number less than 180"
+        }
+        } catch(err){
+            errors.textContent = err
+        }
+
         // Soundbites for good scores
         switch (parseInt(score_id.value)){
             case 180:
                 play_sound("180.mp3");
         }
+
+        
         
         score_id.value = 0;
 
