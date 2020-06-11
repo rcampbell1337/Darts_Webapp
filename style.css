@@ -96,6 +96,10 @@
     text-transform: capitalize;
 }
 
+.rolling{
+    display: none;
+}
+
 /* Remove panel animation */
 @keyframes hide_panel{
     0%{
@@ -104,5 +108,24 @@
     }
     100%{
         opacity: 0;
+    }
+}
+
+/* change style according to screen size */
+@media only screen and (min-width: 1000px){
+    .score_updates div{
+        text-align: right;
+        transform: scale(1.5);
+        margin:20px;
+        margin-right: 230px;
+    }
+}
+
+@media only screen and (min-width:1600px){
+    .score_updates{
+        transform: scale(1.2);
+    }
+    .score_updates div{
+        margin-right: 400px;
     }
 }

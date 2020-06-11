@@ -4,18 +4,18 @@ const number_of_players = document.getElementById("number_of_players");
 const player_name = document.querySelector(".player_name");
 const body = document.querySelector(".body");
 const enter_number_button = document.querySelector(".enter_number");
-const enter_player_button = document.querySelector(".enter_player")
-const names = document.querySelector(".names")
-const setup = document.querySelector(".setup")
-const how_many = document.querySelector(".how_many")
+const enter_player_button = document.querySelector(".enter_player");
+const names = document.querySelector(".names");
+const setup = document.querySelector(".setup");
+const how_many = document.querySelector(".how_many");
 const set_players = document.querySelector(".set_players")
 const score_updates = document.querySelector(".score_updates");
-const restart =  document.querySelector(".restart")
-const errors = document.querySelector(".errors")
+const restart =  document.querySelector(".restart");
+const errors = document.querySelector(".errors");
 
 // A variable which is assigned in enter_number_button but used when entering 
 // players.
-let total
+let total;
 
 // A function that plays different sounds throughout the game
 function play_sound(sound){
@@ -30,6 +30,7 @@ enter_number_button.addEventListener("click", ()=>{
     try{
         if(isNaN(number_of_players.value)) throw "Please enter a number";
         else if(number_of_players.value == "") throw "Please enter a value";
+        else if(number_of_players.value <= 0) throw "Please enter a positive integer"
         total =  number_of_players.value;
         how_many.textContent = "Enter the player names";
         set_players.remove();
@@ -48,7 +49,9 @@ when implementing new scores etc. All of the elements created here are put into
 the playernames table.
 */
 function create_new_player(player){
-    
+
+    // To keep track of score averages
+    let rolling_average = document.createElement("p");
 
     // Create the table elements
     let newRow = document.createElement('tr');
@@ -84,6 +87,11 @@ function create_new_player(player){
     win_number.textContent = 0;
     win_number.id = "win"+i;
 
+    // To keep track of average scores
+    rolling_average.textContent = 0;
+    rolling_average.id = "rolling"+i;
+    rolling_average.classList.add("rolling");
+
 
     // Place all of the variables into the player_names table rows
     newRow.appendChild(playerCol);
@@ -96,6 +104,7 @@ function create_new_player(player){
     numbers.appendChild(average_score);
     numbers.appendChild(thrown_value);
     numbers.appendChild(win_number);
+    numbers.appendChild(rolling_average);
 
     // Place the rows onto the table
     document.querySelector(".playernames").appendChild(newRow);
@@ -112,7 +121,7 @@ function scoreboard(){
     let score_input = document.createElement("input");
 
     // Get the players name and set to each score element
-    playerID = document.getElementById("player_name"+i);
+    let playerID = document.getElementById("player_name"+i);
     nameOfPlayer = playerID.textContent;
 
     // Create IDs for each player input
@@ -120,7 +129,7 @@ function scoreboard(){
     add_score.id = i;
     add_score.classList.add("btn", "btn-primary")
     add_score.textContent = "Add your score!";
-    score_input.value = "0"
+    score_input.value = "0";
 
     // Add all elements to a new div
     newdiv.append(nameOfPlayer);
@@ -174,26 +183,53 @@ button_list.addEventListener("click", function(e) {
         let thrown_value = document.getElementById("thrown_value"+index);
         let thrown_int = +document.getElementById("thrown_value"+index).innerHTML;
         let three_dart_average = document.getElementById("average_score"+index);
+        let rolling_score_text = document.getElementById("rolling"+index);
+        let rolling_score = +document.getElementById("rolling"+index).innerHTML;
 
         // Variable to add darts to average
         let three_darts = 3
 
-        // Don't allow higher values that 180
+        // Don't allow higher values than 180
         if (parseInt(score_id.value) > 180){
             score_id.value = "0";
             three_darts = 0;
         }
+
         // Update the score of the darts thrown and make sure the input is a number
         try{
-        if (isNaN(score_id.value)) throw "Please enter number values only";
+        if (isNaN(score_id.value)) throw "Please enter integer values only";
         else if(score_id.value == "") throw "Please enter a value";
+
+        // Set the score
         score_value.textContent -= parseInt(score_id.value);
+
+        // Throw an error if the score goes below 0 or the input is negative
+        if(score_value.textContent < 0)
+        {
+            score_value.textContent = +score_value.textContent + parseInt(score_id.value)
+             throw "Score cannot be lower than 0";
+        }
+        else if(parseInt(score_id.value) < 0)
+        {
+            score_value.textContent = +score_value.textContent + parseInt(score_id.value)
+            throw "Please enter positive integers only";
+        }
+
+        // Add to the total darts thrown
         thrown_value.textContent = thrown_int += three_darts;
         if (three_darts == 3){
-            three_dart_average.textContent = Math.floor((501 - +score_value.textContent) / (thrown_int / three_darts));
-        }else{
+            rolling_score += parseInt(score_id.value);
+            rolling_score_text.textContent = rolling_score;
+            console.log(rolling_score)
+            three_dart_average.textContent = Math.floor(rolling_score / (thrown_int / three_darts));
+        }
+        
+        // Error handle for numbers higher than 180
+        else{
             throw "Please enter a number less than 180"
         }
+
+        // Write the error to the user
         } catch(err){
             errors.textContent = err
         }
@@ -203,9 +239,6 @@ button_list.addEventListener("click", function(e) {
             case 180:
                 play_sound("180.mp3");
         }
-
-        
-        
         score_id.value = 0;
 
         // Win conditions
@@ -220,7 +253,7 @@ button_list.addEventListener("click", function(e) {
             winner.style.visibility = "visible";
             player_names.style.visibility = "hidden";
             button_list.style.visibility = "hidden";
-            winner.textContent = player_name.value + ", You won!";
+            winner.textContent = document.getElementById("player_name"+index).textContent + ", You won!";
             winner.style.display = "block";
             restart.style.visibility = "visible";
         }
