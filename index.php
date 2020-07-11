@@ -19,7 +19,8 @@
 <body>
     <!-- Pseudo nav bar and title of page-->
     <div class="contain text-center">
-        <h1 class="alert">Let's play darts!</h1>
+        <h1 class="alert">Let's play darts!</h1> 
+        <h4 class="high_score">! HIGH SCORE !</h4>
 
         <h3 class="errors alert-danger"></h3>
         <!-- This table is filled once players have been added by javascript -->

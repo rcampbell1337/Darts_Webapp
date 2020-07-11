@@ -12,10 +12,12 @@ const set_players = document.querySelector(".set_players")
 const score_updates = document.querySelector(".score_updates");
 const restart =  document.querySelector(".restart");
 const errors = document.querySelector(".errors");
+const high_score = document.querySelector(".high_score")
 
 // A variable which is assigned in enter_number_button but used when entering 
 // players.
 let total;
+let current_high_score = 0;
 
 // A function that plays different sounds throughout the game
 function play_sound(sound){
@@ -178,7 +180,7 @@ let player_names = document.querySelector(".playernames");
 let button_list = document.getElementById("button_list");
 
 // Variable for the winner id.
-let winner = document.querySelector(".winner")
+let winner = document.querySelector(".winner");
 
 // Get the element, add a click listener to find the specific ID of each button
 // press. This is the full game code.
@@ -190,6 +192,7 @@ button_list.addEventListener("click", function(e) {
         let index = i.id;
         // Variables that need to be changed
         let score_id = document.getElementById("score"+index);
+        let player_name = document.getElementById("player_name"+index).textContent;
         let score_value = document.getElementById("score_value"+index);
         let thrown_value = document.getElementById("thrown_value"+index);
         let thrown_int = +document.getElementById("thrown_value"+index).innerHTML;
@@ -198,8 +201,13 @@ button_list.addEventListener("click", function(e) {
         let rolling_score = +document.getElementById("rolling"+index).innerHTML;
         let last_dart_thrown = document.getElementById("last"+index);
         // Variable to add darts to average
-        let three_darts = 3
+        let three_darts = 3;
 
+        // Update the highest score of the night
+        if (current_high_score < Number(score_id.value)){
+            current_high_score = score_id.value
+            high_score.textContent = `High-score: ${player_name} with ${score_id.value}`
+        }
         // Don't allow higher values than 180
         if (parseInt(score_id.value) > 180){
             score_id.value = "0";
