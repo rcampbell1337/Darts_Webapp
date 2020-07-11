@@ -166,7 +166,7 @@ enter_player_button.addEventListener("click", ()=>{
         create_new_player(player_name.value);
         scoreboard();
         score_updates.style.padding = "20px";
-        player_name.value = ""
+        player_name.value = "";
 
         // If statement to remove the input panel
         if (i == total){
