@@ -265,8 +265,21 @@ button_list.addEventListener("click", function(e) {
 
         // Soundbites for good scores
         switch (parseInt(score_id.value)){
+            case 100:
+                play_sound("scores/100.mp3");
+                break;
+            case 120:
+                play_sound("scores/120.mp3");
+                break;
+            case 140:
+                play_sound("scores/140.mp3");
+                break;
+            case 160:
+                play_sound("scores/160.mp3");
+                break;
             case 180:
-                play_sound("180.mp3");
+                play_sound("scores/180.mp3");
+                break;
         }
         score_id.value = "";
 
