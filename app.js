@@ -213,18 +213,15 @@ button_list.addEventListener("click", function(e) {
 
         // Set the score
         score_value.textContent -= parseInt(score_id.value);
-        last_dart_thrown.textContent = score_id.value;
-
+        last_dart_thrown.textContent = parseInt(score_id.value);
+        
         document.getElementById("undo"+index).addEventListener("click", ()=>{
-            if (score_id.value > 501){
-                throw "Score cannot be higher than 501.";
-            }
-            let return_score = parseInt(last_dart_thrown.textContent)
-            score_value.textContent -= -return_score;
-            rolling_score -= return_score;
-            rolling_score_text.textContent = rolling_score
-            three_darts = -3
+            score_value.textContent -= -parseInt(last_dart_thrown.textContent);
+            rolling_score_text.textContent -= parseInt(last_dart_thrown.textContent)
+            three_darts = -3;
             thrown_value.textContent = thrown_int += three_darts;
+            console.log(rolling_score -= parseInt(last_dart_thrown.textContent))
+            last_dart_thrown.textContent = 0;
         })
 
         // Throw an error if the score goes below 0 or the input is negative
