@@ -60,6 +60,8 @@ function create_new_player(player){
     let average = document.createElement("th");
     let thrown = document.createElement("th");
     let wins = document.createElement("th");
+    let last_dart_thrown = document.createElement("th");
+
 
     // Set text of table elements
     playerCol.textContent = player;
@@ -68,6 +70,7 @@ function create_new_player(player){
     average.textContent = "3 Dart average";
     thrown.textContent = "Darts Thrown";
     wins.textContent = "# of wins";
+    last_dart_thrown.textContent = "Last Throw";
 
     // Create the number values
     let numbers = document.createElement("tr");
@@ -76,6 +79,7 @@ function create_new_player(player){
     let average_score = document.createElement("td");
     let thrown_value = document.createElement("td");
     let win_number = document.createElement("td");
+    let last_throw = document.createElement("td");
 
     // Set number elements values and give them ID's
     score_value.textContent = 501;
@@ -86,6 +90,8 @@ function create_new_player(player){
     thrown_value.id = "thrown_value"+i;
     win_number.textContent = 0;
     win_number.id = "win"+i;
+    last_throw.textContent = 0;
+    last_throw.id = "last"+i;
 
     // To keep track of average scores
     rolling_average.textContent = 0;
@@ -99,12 +105,14 @@ function create_new_player(player){
     newRow.appendChild(average);
     newRow.appendChild(thrown);
     newRow.appendChild(wins);
+    newRow.appendChild(last_dart_thrown);
     numbers.appendChild(blankCol);
     numbers.appendChild(score_value);
     numbers.appendChild(average_score);
     numbers.appendChild(thrown_value);
     numbers.appendChild(win_number);
     numbers.appendChild(rolling_average);
+    numbers.appendChild(last_throw)
 
     // Place the rows onto the table
     document.querySelector(".playernames").appendChild(newRow);
@@ -118,6 +126,7 @@ function scoreboard(){
     let newdiv = document.createElement("div");
     let nameOfPlayer = document.createElement("p");
     let add_score = document.createElement("button");
+    let undo_score = document.createElement("button");
     let score_input = document.createElement("input");
 
     // Get the players name and set to each score element
@@ -127,13 +136,17 @@ function scoreboard(){
     // Create IDs for each player input
     score_input.id = "score"+i;
     add_score.id = i;
+    undo_score.id = "undo" + i
+    undo_score.classList.add("btn", "btn-secondary")
+    undo_score.textContent = "Undo score"
     add_score.classList.add("btn", "btn-primary")
-    add_score.textContent = "Add your score!";
+    add_score.textContent = "Add score";
     score_input.value = "0";
 
     // Add all elements to a new div
     newdiv.append(nameOfPlayer);
     newdiv.append(score_input);
+    newdiv.append(undo_score)
     newdiv.appendChild(add_score);
 
     // Add to DOM
@@ -172,11 +185,9 @@ let winner = document.querySelector(".winner")
 button_list.addEventListener("click", function(e) {
 	if(e.target && e.target.nodeName == "BUTTON") {
         errors.textContent = "";
-
         // These variables are used to get the button ID
         let i = document.getElementById(e.target.id);
         let index = i.id;
-        
         // Variables that need to be changed
         let score_id = document.getElementById("score"+index);
         let score_value = document.getElementById("score_value"+index);
@@ -185,7 +196,7 @@ button_list.addEventListener("click", function(e) {
         let three_dart_average = document.getElementById("average_score"+index);
         let rolling_score_text = document.getElementById("rolling"+index);
         let rolling_score = +document.getElementById("rolling"+index).innerHTML;
-
+        let last_dart_thrown = document.getElementById("last"+index);
         // Variable to add darts to average
         let three_darts = 3
 
@@ -202,6 +213,19 @@ button_list.addEventListener("click", function(e) {
 
         // Set the score
         score_value.textContent -= parseInt(score_id.value);
+        last_dart_thrown.textContent = score_id.value;
+
+        document.getElementById("undo"+index).addEventListener("click", ()=>{
+            if (score_id.value > 501){
+                throw "Score cannot be higher than 501.";
+            }
+            let return_score = parseInt(last_dart_thrown.textContent)
+            score_value.textContent -= -return_score;
+            rolling_score -= return_score;
+            rolling_score_text.textContent = rolling_score
+            three_darts = -3
+            thrown_value.textContent = thrown_int += three_darts;
+        })
 
         // Throw an error if the score goes below 0 or the input is negative
         if(score_value.textContent < 0)
@@ -239,7 +263,7 @@ button_list.addEventListener("click", function(e) {
             case 180:
                 play_sound("180.mp3");
         }
-        score_id.value = 0;
+        score_id.value = "";
 
         // Win conditions
         if (score_value.textContent == 0)
