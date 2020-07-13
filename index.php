@@ -20,9 +20,8 @@
     <!-- Pseudo nav bar and title of page-->
     <div class="contain text-center">
         <h1 class="alert">Let's play darts!</h1> 
-        <h4 class="high_score">! HIGH SCORE !</h4>
-
         <h3 class="errors alert-danger"></h3>
+        <h4 class="high_score">! HIGH SCORE !</h4>
         <!-- This table is filled once players have been added by javascript -->
             <table class="playernames text-center">
                 
@@ -55,7 +54,7 @@
                         <option value="2">2</option>
                         <option value="3">3</option>
                     </select>
-                    <button id="dart_out" class="enter_dart_out btn btn-primary">Enter out</button>
+                    <h3 id="dart_out" class="enter_dart_out">Enter out</h3>
                 </div>
     </div>
 <script src="app.js"></script>

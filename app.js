@@ -210,16 +210,18 @@ button_list.addEventListener("click", function(e) {
             current_high_score = score_id.value
             high_score.textContent = `High-score: ${player_name} with ${score_id.value}`
         }
-        // Don't allow higher values than 180
-        if (parseInt(score_id.value) > 180){
-            score_id.value = "0";
-            three_darts = 0;
-        }
 
         // Update the score of the darts thrown and make sure the input is a number
         try{
         if (isNaN(score_id.value)) throw "Please enter integer values only";
         else if(score_id.value == "") throw "Please enter a value";
+        
+        // Don't allow higher values than 180
+        if (parseInt(score_id.value) > 180){
+            score_id.value = "0";
+            three_darts = 0;
+            throw "Please enter a number less than 180"
+        }
 
         // Set the score
         score_value.textContent -= parseInt(score_id.value);
@@ -240,7 +242,7 @@ button_list.addEventListener("click", function(e) {
             three_darts = 0;
             out_div.style.visibility = "visible";
             button_list.style.visibility = "hidden";
-            document.querySelector(".enter_dart_out").addEventListener("click", ()=>{
+            out_div.addEventListener("change", ()=>{
             // Add to the win number
             player_names.style.visibility = "hidden";
             winner.style.visibility = "visible";
@@ -277,11 +279,6 @@ button_list.addEventListener("click", function(e) {
             rolling_score_text.textContent = rolling_score;
             console.log(rolling_score)
             three_dart_average.textContent = Math.floor(rolling_score / (thrown_int / three_darts));
-        }
-        
-        // Error handle for numbers higher than 180
-        else{
-            throw "Please enter a number less than 180"
         }
 
         // Write the error to the user
