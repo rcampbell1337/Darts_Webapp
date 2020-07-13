@@ -237,6 +237,7 @@ button_list.addEventListener("click", function(e) {
         if (score_value.textContent == 0)
         {
             // Set visibility on elements
+            three_darts = 0;
             out_div.style.visibility = "visible";
             button_list.style.visibility = "hidden";
             document.querySelector(".enter_dart_out").addEventListener("click", ()=>{
