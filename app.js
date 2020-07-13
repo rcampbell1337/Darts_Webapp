@@ -14,6 +14,7 @@ const restart =  document.querySelector(".restart");
 const errors = document.querySelector(".errors");
 const high_score = document.querySelector(".high_score")
 const out_div = document.querySelector(".dart_out");
+const num_value = document.getElementById("darts");
 
 // A variable which is assigned in enter_number_button but used when entering 
 // players.
@@ -26,9 +27,7 @@ function play_sound(sound){
     return play_sound;
 }
 
-// A function which sets how many players are to be added
-enter_number_button.addEventListener("click", ()=>{
-
+function how_many_players(){
     // Make sure the user inputs a valid total
     try{
         if(isNaN(number_of_players.value)) throw "Please enter a number";
@@ -43,7 +42,18 @@ enter_number_button.addEventListener("click", ()=>{
     }catch(err){
         errors.textContent = err;
     }
+}
+
+// A function which sets how many players are to be added
+enter_number_button.addEventListener("click", ()=>{
+    how_many_players();
 }) 
+
+number_of_players.addEventListener("keyup", (e)=>{
+    if (e.keyCode === 13){
+        how_many_players();
+    }
+})
 
 /* 
 This function creates DOM elements which are can be referenced for later use.
@@ -137,7 +147,7 @@ function scoreboard(){
     nameOfPlayer = playerID.textContent;
 
     // Create IDs for each player input
-    score_input.id = "score"+i;
+    score_input.id = i;
     add_score.id = i;
     undo_score.id = "undo" + i
     undo_score.classList.add("btn", "btn-secondary")
@@ -160,8 +170,7 @@ function scoreboard(){
 // Create an index variable to end the loop
 let i = 0
 
-// A function which adds players to the DOM
-enter_player_button.addEventListener("click", ()=>{
+function enter_player(){
     i++
     if (i <= total){
         create_new_player(player_name.value);
@@ -176,6 +185,17 @@ enter_player_button.addEventListener("click", ()=>{
             score_updates.classList.add(".dart_add");
         }
     }
+}
+
+// A function which adds players to the DOM
+enter_player_button.addEventListener("click", ()=>{
+    enter_player();
+})
+
+player_name.addEventListener("keyup", (e)=>{
+    if (e.keyCode === 13){
+        enter_player();
+    }
 })
 
 let player_names = document.querySelector(".playernames");
@@ -186,128 +206,135 @@ let winner = document.querySelector(".winner");
 
 // Get the element, add a click listener to find the specific ID of each button
 // press. This is the full game code.
+
+function GameLoop(e){
+    errors.textContent = "";
+    // These variables are used to get the button ID
+    let i = document.getElementById(e.target.id);
+    let index = i.id;
+    // Variables that need to be changed
+    let score_id = document.getElementById(index);
+    let player_name = document.getElementById("player_name"+index).textContent;
+    let score_value = document.getElementById("score_value"+index);
+    let thrown_value = document.getElementById("thrown_value"+index);
+    let thrown_int = +document.getElementById("thrown_value"+index).innerHTML;
+    let three_dart_average = document.getElementById("average_score"+index);
+    let rolling_score_text = document.getElementById("rolling"+index);
+    let rolling_score = +document.getElementById("rolling"+index).innerHTML;
+    let last_dart_thrown = document.getElementById("last"+index);
+    // Variable to add darts to average
+    let three_darts = 3;
+
+    // Update the highest score of the night
+    if (current_high_score < Number(score_id.value) && score_id.value <= 180){
+        current_high_score = score_id.value
+        high_score.textContent = `High-score: ${player_name} with ${score_id.value}`
+    }
+
+    // Update the score of the darts thrown and make sure the input is a number
+    try{
+    if (isNaN(score_id.value)) throw "Please enter integer values only";
+    else if(score_id.value == "") throw "Please enter a value";
+    
+    // Don't allow higher values than 180
+    if (parseInt(score_id.value) > 180){
+        score_id.value = "0";
+        three_darts = 0;
+        throw "Please enter a number less than 180"
+    }
+
+    // Set the score
+    score_value.textContent -= parseInt(score_id.value);
+    last_dart_thrown.textContent = parseInt(score_id.value);
+    
+    document.getElementById("undo"+index).addEventListener("click", ()=>{
+        score_value.textContent -= -parseInt(last_dart_thrown.textContent);
+        rolling_score_text.textContent -= parseInt(last_dart_thrown.textContent)
+        three_darts = -3;
+        thrown_value.textContent = thrown_int += three_darts;
+        console.log(rolling_score -= parseInt(last_dart_thrown.textContent))
+        last_dart_thrown.textContent = 0;
+    })
+
+    if (score_value.textContent == 0)
+    {
+        // Set visibility on elements
+        three_darts = 0;
+        out_div.style.visibility = "visible";
+        button_list.style.visibility = "hidden";
+        out_div.addEventListener("change", ()=>{
+        // Add to the win number
+        var strUser = num_value.options[num_value.selectedIndex].value;
+        player_names.style.visibility = "hidden";
+        winner.style.visibility = "visible";
+        winner.textContent = document.getElementById("player_name"+index).textContent + ", You won!";
+        winner.style.display = "block";
+        restart.style.visibility = "visible";
+        thrown_value.textContent = thrown_int += parseInt(strUser);
+        out_div.style.visibility = "hidden";
+        })
+        let win = document.getElementById("win"+index);
+        let win_int = +document.getElementById("win"+index).innerHTML;
+        win.textContent = win_int += 1;
+    }
+
+    // Throw an error if the score goes below 0 or the input is negative
+    if(score_value.textContent < 0)
+    {
+        score_value.textContent = +score_value.textContent + parseInt(score_id.value)
+            throw "Score cannot be lower than 0";
+    }
+    else if(parseInt(score_id.value) < 0)
+    {
+        score_value.textContent = +score_value.textContent + parseInt(score_id.value)
+        throw "Please enter positive integers only";
+    }
+
+    // Add to the total darts thrown
+    thrown_value.textContent = thrown_int += three_darts;
+    if (three_darts == 3){
+        rolling_score += parseInt(score_id.value);
+        rolling_score_text.textContent = rolling_score;
+        console.log(rolling_score)
+        three_dart_average.textContent = Math.floor(rolling_score / (thrown_int / three_darts));
+    }
+
+    // Write the error to the user
+    } catch(err){
+        errors.textContent = err
+    }
+
+    // Soundbites for good scores
+    switch (parseInt(score_id.value)){
+        case 100:
+            play_sound("scores/100.mp3");
+            break;
+        case 120:
+            play_sound("scores/120.mp3");
+            break;
+        case 140:
+            play_sound("scores/140.mp3");
+            break;
+        case 160:
+            play_sound("scores/160.mp3");
+            break;
+        case 180:
+            play_sound("scores/180.mp3");
+            break;
+    }
+    score_id.value = "";
+}
+
 button_list.addEventListener("click", function(e) {
 	if(e.target && e.target.nodeName == "BUTTON") {
-        errors.textContent = "";
-        // These variables are used to get the button ID
-        let i = document.getElementById(e.target.id);
-        let index = i.id;
-        // Variables that need to be changed
-        let score_id = document.getElementById("score"+index);
-        let player_name = document.getElementById("player_name"+index).textContent;
-        let score_value = document.getElementById("score_value"+index);
-        let thrown_value = document.getElementById("thrown_value"+index);
-        let thrown_int = +document.getElementById("thrown_value"+index).innerHTML;
-        let three_dart_average = document.getElementById("average_score"+index);
-        let rolling_score_text = document.getElementById("rolling"+index);
-        let rolling_score = +document.getElementById("rolling"+index).innerHTML;
-        let last_dart_thrown = document.getElementById("last"+index);
-        // Variable to add darts to average
-        let three_darts = 3;
+        GameLoop(e);
+    }
+});
 
-        // Update the highest score of the night
-        if (current_high_score < Number(score_id.value) && score_id.value <= 180){
-            current_high_score = score_id.value
-            high_score.textContent = `High-score: ${player_name} with ${score_id.value}`
-        }
-
-        // Update the score of the darts thrown and make sure the input is a number
-        try{
-        if (isNaN(score_id.value)) throw "Please enter integer values only";
-        else if(score_id.value == "") throw "Please enter a value";
-        
-        // Don't allow higher values than 180
-        if (parseInt(score_id.value) > 180){
-            score_id.value = "0";
-            three_darts = 0;
-            throw "Please enter a number less than 180"
-        }
-
-        // Set the score
-        score_value.textContent -= parseInt(score_id.value);
-        last_dart_thrown.textContent = parseInt(score_id.value);
-        
-        document.getElementById("undo"+index).addEventListener("click", ()=>{
-            score_value.textContent -= -parseInt(last_dart_thrown.textContent);
-            rolling_score_text.textContent -= parseInt(last_dart_thrown.textContent)
-            three_darts = -3;
-            thrown_value.textContent = thrown_int += three_darts;
-            console.log(rolling_score -= parseInt(last_dart_thrown.textContent))
-            last_dart_thrown.textContent = 0;
-        })
-
-        if (score_value.textContent == 0)
-        {
-            // Set visibility on elements
-            three_darts = 0;
-            out_div.style.visibility = "visible";
-            button_list.style.visibility = "hidden";
-            out_div.addEventListener("change", ()=>{
-            // Add to the win number
-            player_names.style.visibility = "hidden";
-            winner.style.visibility = "visible";
-            winner.textContent = document.getElementById("player_name"+index).textContent + ", You won!";
-            winner.style.display = "block";
-            restart.style.visibility = "visible";
-            var num_value = document.getElementById("darts");
-            var strUser = num_value.options[num_value.selectedIndex].value;
-            console.log(strUser);
-            thrown_value.textContent = thrown_int += parseInt(strUser);
-            let win = document.getElementById("win"+index);
-            let win_int = +document.getElementById("win"+index).innerHTML;
-            win.textContent = win_int += 1;
-            out_div.style.visibility = "hidden";
-            })
-        }
-
-        // Throw an error if the score goes below 0 or the input is negative
-        if(score_value.textContent < 0)
-        {
-            score_value.textContent = +score_value.textContent + parseInt(score_id.value)
-             throw "Score cannot be lower than 0";
-        }
-        else if(parseInt(score_id.value) < 0)
-        {
-            score_value.textContent = +score_value.textContent + parseInt(score_id.value)
-            throw "Please enter positive integers only";
-        }
-
-        // Add to the total darts thrown
-        thrown_value.textContent = thrown_int += three_darts;
-        if (three_darts == 3){
-            rolling_score += parseInt(score_id.value);
-            rolling_score_text.textContent = rolling_score;
-            console.log(rolling_score)
-            three_dart_average.textContent = Math.floor(rolling_score / (thrown_int / three_darts));
-        }
-
-        // Write the error to the user
-        } catch(err){
-            errors.textContent = err
-        }
-
-        // Soundbites for good scores
-        switch (parseInt(score_id.value)){
-            case 100:
-                play_sound("scores/100.mp3");
-                break;
-            case 120:
-                play_sound("scores/120.mp3");
-                break;
-            case 140:
-                play_sound("scores/140.mp3");
-                break;
-            case 160:
-                play_sound("scores/160.mp3");
-                break;
-            case 180:
-                play_sound("scores/180.mp3");
-                break;
-        }
-        score_id.value = "";
-
-        // Win conditions
-	}
+button_list.addEventListener("keyup", function(e) {
+	if(e.keyCode == 13) {
+        GameLoop(e);
+    }
 });
 
 // Restart the game on click
@@ -318,6 +345,7 @@ restart.addEventListener("click", () =>{
     button_list.style.visibility = "visible";
     restart.style.visibility = "hidden";
     winner.style.display = "none";
+    num_value.selectedIndex = "default"
 
     // Create a loop for all players
     for (let index = 0; index < i; index++)
