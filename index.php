@@ -46,10 +46,17 @@
                 </div>
                 <!-- Put in place of the select player number after selecting player numbers -->
                 <div class="names">
-                    <input type="text" class="player_name" placeholder="enter player name">
+                    <input type="text" class="player_name" placeholder="Enter player name">
                     <button class="enter_player btn btn-primary">Enter player name</button>
                 </div>
-            </div>
+                <div class="dart_out">
+                    <select name="darts_out" id="darts">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                    </select>
+                    <button id="dart_out" class="enter_dart_out btn btn-primary">Enter out</button>
+                </div>
     </div>
 <script src="app.js"></script>
 </body>

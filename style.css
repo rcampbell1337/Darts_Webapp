@@ -70,6 +70,7 @@
 .score_updates button{
     padding:5px;
     font-weight: 700;
+    margin: 8px;
 }
 
 .score_updates div{
@@ -108,6 +109,11 @@
 
 .rolling{
     display: none;
+}
+.dart_out{
+    visibility: hidden;
+    background-color: rgba(255, 255, 255, 0.7);
+    padding: 5px;
 }
 
 /* Remove panel animation */

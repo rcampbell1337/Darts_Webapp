@@ -13,6 +13,7 @@ const score_updates = document.querySelector(".score_updates");
 const restart =  document.querySelector(".restart");
 const errors = document.querySelector(".errors");
 const high_score = document.querySelector(".high_score")
+const out_div = document.querySelector(".dart_out");
 
 // A variable which is assigned in enter_number_button but used when entering 
 // players.
@@ -205,7 +206,7 @@ button_list.addEventListener("click", function(e) {
         let three_darts = 3;
 
         // Update the highest score of the night
-        if (current_high_score < Number(score_id.value)){
+        if (current_high_score < Number(score_id.value) && score_id.value <= 180){
             current_high_score = score_id.value
             high_score.textContent = `High-score: ${player_name} with ${score_id.value}`
         }
@@ -232,6 +233,29 @@ button_list.addEventListener("click", function(e) {
             console.log(rolling_score -= parseInt(last_dart_thrown.textContent))
             last_dart_thrown.textContent = 0;
         })
+
+        if (score_value.textContent == 0)
+        {
+            // Set visibility on elements
+            out_div.style.visibility = "visible";
+            button_list.style.visibility = "hidden";
+            document.querySelector(".enter_dart_out").addEventListener("click", ()=>{
+            // Add to the win number
+            player_names.style.visibility = "hidden";
+            winner.style.visibility = "visible";
+            winner.textContent = document.getElementById("player_name"+index).textContent + ", You won!";
+            winner.style.display = "block";
+            restart.style.visibility = "visible";
+            var num_value = document.getElementById("darts");
+            var strUser = num_value.options[num_value.selectedIndex].value;
+            console.log(strUser);
+            thrown_value.textContent = thrown_int += parseInt(strUser);
+            let win = document.getElementById("win"+index);
+            let win_int = +document.getElementById("win"+index).innerHTML;
+            win.textContent = win_int += 1;
+            out_div.style.visibility = "hidden";
+            })
+        }
 
         // Throw an error if the score goes below 0 or the input is negative
         if(score_value.textContent < 0)
@@ -285,21 +309,6 @@ button_list.addEventListener("click", function(e) {
         score_id.value = "";
 
         // Win conditions
-        if (score_value.textContent == 0)
-        {
-            // Add to the win number
-            let win = document.getElementById("win"+index);
-            let win_int = +document.getElementById("win"+index).innerHTML;
-            win.textContent = win_int += 1;
-
-            // Set visibility on elements
-            winner.style.visibility = "visible";
-            player_names.style.visibility = "hidden";
-            button_list.style.visibility = "hidden";
-            winner.textContent = document.getElementById("player_name"+index).textContent + ", You won!";
-            winner.style.display = "block";
-            restart.style.visibility = "visible";
-        }
 	}
 });
 
