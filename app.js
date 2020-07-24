@@ -307,7 +307,7 @@ function GameLoop(e){
     // Soundbites for good scores
     switch (parseInt(score_id.value)){
         case 26:
-            play_sound("scores/unlucky.mp3")
+            play_sound("scores/unlucky.mp3");
             break;
         case 100:
             play_sound("scores/100.mp3");
