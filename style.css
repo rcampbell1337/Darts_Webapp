@@ -70,16 +70,17 @@
 }
 
 .score_updates button{
-    padding:5px;
     font-weight: 700;
-    margin: 8px;
+    margin: 4px;
 }
 
 .score_updates div{
-    margin:4px;
     font-weight: 700;
+    padding:10px;
+    margin: 5px;
+    border: 1px solid grey;
+    background-color: rgba(255, 255, 255, 0.8);
 }
-
 
 /* Style for the restart button */
 .restart{

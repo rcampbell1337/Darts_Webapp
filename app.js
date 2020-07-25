@@ -148,25 +148,26 @@ function scoreboard(){
     let undo_score = document.createElement("button");
     let score_input = document.createElement("input");
 
-    // Get the players name and set to each score element
-    let playerID = document.getElementById("player_name"+i);
-    nameOfPlayer = playerID.textContent;
-
     // Create IDs for each player input
     score_input.id = i;
     add_score.id = i;
     undo_score.id = "undo" + i
+    nameOfPlayer.id = "score_player"+i;
     undo_score.classList.add("btn", "btn-secondary")
     undo_score.textContent = "Undo score"
     add_score.classList.add("btn", "btn-primary")
     add_score.textContent = "Add score";
     score_input.value = "0";
 
+    // Get the players name and set to each score element
+    let playerID = document.getElementById("player_name"+i);
+    nameOfPlayer.textContent = playerID.textContent;
+
     // Add all elements to a new div
     newdiv.append(nameOfPlayer);
     newdiv.append(score_input);
-    newdiv.append(undo_score)
     newdiv.appendChild(add_score);
+    newdiv.append(undo_score);
 
     // Add to DOM
     score_updates.appendChild(newdiv);
@@ -216,6 +217,7 @@ function reset(e){
     let split = index.split(" ");
     let resetter = split[1];
     let name = document.getElementById("player_name"+resetter);
+    let score_name = document.getElementById("score_player"+resetter);
     let new_name = document.createElement("input");
     i.addEventListener("click", ()=>{
         name.textContent = "";
@@ -225,6 +227,7 @@ function reset(e){
         if(e.keyCode == 13) {
             console.log(new_name.value);
             name.textContent = new_name.value;
+            score_name.textContent = new_name.value;
         }
     });
 }
