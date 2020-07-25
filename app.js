@@ -87,7 +87,7 @@ function create_new_player(player){
 
     // Create the number values
     let numbers = document.createElement("tr");
-    let blankCol = document.createElement("td");
+    let resetName = document.createElement("td");
     let score_value = document.createElement("td");
     let average_score = document.createElement("td");
     let thrown_value = document.createElement("td");
@@ -95,6 +95,8 @@ function create_new_player(player){
     let last_throw = document.createElement("td");
 
     // Set number elements values and give them ID's
+    resetName.id = "reset "+i;
+    resetName.textContent = "Reset name"
     score_value.textContent = 501;
     score_value.id = "score_value"+i;
     average_score.textContent = 0;
@@ -111,6 +113,10 @@ function create_new_player(player){
     rolling_average.id = "rolling"+i;
     rolling_average.classList.add("rolling");
 
+    // Style the reset button
+    resetName.style.background = "#CCCCCC";
+    resetName.style.pointerEvents = "all";
+
 
     // Place all of the variables into the player_names table rows
     newRow.appendChild(playerCol);
@@ -119,7 +125,7 @@ function create_new_player(player){
     newRow.appendChild(thrown);
     newRow.appendChild(wins);
     newRow.appendChild(last_dart_thrown);
-    numbers.appendChild(blankCol);
+    numbers.appendChild(resetName);
     numbers.appendChild(score_value);
     numbers.appendChild(average_score);
     numbers.appendChild(thrown_value);
@@ -204,14 +210,41 @@ let button_list = document.getElementById("button_list");
 // Variable for the winner id.
 let winner = document.querySelector(".winner");
 
+function reset(e){
+    let i = document.getElementById(e.target.id);
+    let index = i.id;
+    let split = index.split(" ");
+    let resetter = split[1];
+    let name = document.getElementById("player_name"+resetter);
+    let new_name = document.createElement("input");
+    i.addEventListener("click", ()=>{
+        name.textContent = "";
+        name.appendChild(new_name);
+    })
+    new_name.addEventListener("keyup", function(e) {
+        if(e.keyCode == 13) {
+            console.log(new_name.value);
+            name.textContent = new_name.value;
+        }
+    });
+}
+
+player_names.addEventListener("click", function(e) {
+	if(e.target && e.target.nodeName == "TD") {
+        reset(e);
+    }
+});
+
+
 // Get the element, add a click listener to find the specific ID of each button
 // press. This is the full game code.
 
 function GameLoop(e){
-    errors.textContent = "";
     // These variables are used to get the button ID
     let i = document.getElementById(e.target.id);
     let index = i.id;
+
+    errors.textContent = "";
     // Variables that need to be changed
     let score_id = document.getElementById(index);
     let player_name = document.getElementById("player_name"+index).textContent;
