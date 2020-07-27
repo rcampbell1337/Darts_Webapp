@@ -96,7 +96,7 @@ function create_new_player(player){
 
     // Set number elements values and give them ID's
     resetName.id = "reset "+i;
-    resetName.textContent = "Reset name"
+    resetName.textContent = "Edit"
     score_value.textContent = 501;
     score_value.id = "score_value"+i;
     average_score.textContent = 0;
