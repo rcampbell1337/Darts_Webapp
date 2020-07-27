@@ -11,7 +11,7 @@
     background: #0a642d;
     object-fit: contain;
     height:100vh;
-    position: absolute;
+    position: fixed;
     font-family: sans-serif;
 }
 
